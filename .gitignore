@@ -1,0 +1,11 @@
+/data.log
+/data.lck
+/data.properties
+/data.script
+data.tmp/
+target/
+*.iml
+*.
+.DS_Store
+.idea/
+
