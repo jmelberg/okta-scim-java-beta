@@ -4,6 +4,7 @@
 /data.script
 data.tmp/
 target/
+libraries/
 *.iml
 *.
 .DS_Store
