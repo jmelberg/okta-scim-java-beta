@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Database schema for {@link User} object
+ */
 @Entity
 @Table(name="users")
 public class User {
@@ -32,21 +35,17 @@ public class User {
     @Column(length=250)
     public String givenName;
 
-    // Default Constructor
     User() {}
 
-    // Creates new User from JSON
     User(Map<String, Object> resource){
         this.update(resource);
     }
 
+    /**
+     * Updates {@link User} object from JSON {@link Map}
+     * @param resource JSON {@link Map} of {@link User}
+     */
     void update(Map<String, Object> resource) {
-        /*
-          Updates User object from JSON
-
-          Params:
-                  JSON
-        */
         try{
             Map<String, Object> names = (Map<String, Object>)resource.get("name");
             for(String subName : names.keySet()){
@@ -71,14 +70,12 @@ public class User {
         }
     }
 
+    /**
+     * Formats JSON {@link Map} response with {@link User} attributes.
+     *
+     * @return JSON {@link Map} of {@link User}
+     */
     Map toScimResource(){
-        /*
-          Formats JSON map response with User attributes.
-
-          Returns:
-                  JSON map of User
-        */
-
         Map<String, Object> returnValue = new HashMap<>();
         List<String> schemas = new ArrayList<>();
         schemas.add("urn:ietf:params:scim:schemas:core:2.0:User");
@@ -87,14 +84,14 @@ public class User {
         returnValue.put("active", this.active);
         returnValue.put("userName", this.userName);
 
-        // Get names
+        // Names
         Map<String, Object> names = new HashMap<>();
         names.put("familyName", this.familyName);
         names.put("givenName", this.givenName);
         names.put("middleName", this.middleName);
         returnValue.put("name", names);
 
-        // Get meta information
+        // Meta information
         Map<String, Object> meta = new HashMap<>();
         meta.put("resourceType", "User");
         meta.put("meta", ("/scim/v2/Users/" + this.userName));

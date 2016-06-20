@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
 
+/**
+ *  URL route example.com/scim/v2/Groups
+ */
+
+
 @Controller
 @RequestMapping("/scim/v2/Groups")
 public class GroupsController {
@@ -17,14 +22,13 @@ public class GroupsController {
     public GroupsController(Database db) {
         this.db = db;
     }
-
+    /**
+     *  Returns default {@link ListResponse} object
+     *
+     *  @return JSON {@link Map} {@link ListResponse}
+     */
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody Map groupsGet() {
-        /*
-            ** Needs further implementation **
-
-            Returns default ListResponse
-        */
         ListResponse groups = new ListResponse();
         return groups.toScimResource();
     }

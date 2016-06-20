@@ -12,15 +12,9 @@ import java.util.Optional;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-/*
-    SingleUsersController - URL route example.com/scim/v2/Users/{id}
-
-    GET:    Returns user attributes given unique identifier
-
-    PUT:    Updates resource
-
-    PATCH:  Updates resource
-*/
+/**
+ * URL route example.com/scim/v2/Users/{id}
+ */
 
 @Controller
 @RequestMapping("/scim/v2/Users/{id}")
@@ -32,18 +26,18 @@ public class SingleUserController {
         this.db = db;
     }
 
+    /**
+     * Queries database for {@link User} with identifier
+     * Updates response code with '404' if unable to locate {@link User}
+     *
+     * @param id {@link User#id}
+     * @param response HTTP Response
+     * @return {@link #scimError(String, Optional)} / JSON {@link Map} of {@link User}
+     *
+     */
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody Map singeUserGet(@PathVariable String id,  HttpServletResponse response) {
-        /*
-          Queries database for user with identifier
-          Updates response with code '404' if unable to find
 
-          Params:
-                  String id - ID of user for query
-          Returns:
-                  scimError (See scimError doc)
-
-        */
         try {
             User user = db.findById(id).get(0);
             return user.toScimResource();
@@ -54,38 +48,32 @@ public class SingleUserController {
         }
     }
 
+    /**
+     * Update via Put {@link User} attributes
+     *
+     * @param payload Payload from HTTP request
+     * @param id {@link User#id}
+     * @return JSON {@link Map} of {@link User}
+     */
     @RequestMapping(method = RequestMethod.PUT)
     public @ResponseBody Map singleUserPut(@RequestBody Map<String, Object> payload,
                                            @PathVariable String id) {
-        /*
-            Updates user attributes
-
-            Params:
-                    JSON map - payload
-                    String id - id of user for update
-            Returns:
-                    renderJson (See renderJson doc)
-        */
-
         User user = db.findById(id).get(0);
         user.update(payload);
         return user.toScimResource();
     }
 
+    /**
+     * Update via Patch {@link User} attributes
+     *
+     * @param payload Payload from HTTP request
+     * @param id {@link User#id}
+     *
+     * @return {@link #scimError(String, Optional)} / JSON {@link Map} of {@link User}
+     */
     @RequestMapping(method = RequestMethod.PATCH)
     public @ResponseBody Map singleUserPatch(@RequestBody Map<String, Object> payload,
                                              @PathVariable String id) {
-        /*
-            Updates user attributes
-
-            Params:
-                    JSON map - payload
-                    String id - id of user for update
-            Returns:
-                    scimError (See scimError doc)
-                    renderJson (See renderJson doc)
-        */
-
         List schema = (List)payload.get("schemas");
         List<Map> operations = (List)payload.get("Operations");
 
@@ -126,16 +114,14 @@ public class SingleUserController {
         return user.toScimResource();
     }
 
+    /**
+     * Output custom error message with response code
+     *
+     * @param message Scim error message
+     * @param status_code Response status code
+     * @return JSON {@link Map} of {@link User}
+     */
     public Map scimError(String message, Optional<Integer> status_code){
-        /*
-            Output custom error message with response code
-
-            Params:
-                    String message - text to display
-                    int status_code - server error code
-            Returns
-                    JSON dictionary
-        */
 
         Map<String, Object> returnValue = new HashMap<>();
         List<String> schemas = new ArrayList<>();

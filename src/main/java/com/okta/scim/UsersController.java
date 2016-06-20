@@ -14,14 +14,9 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-/*
-    UsersController - URL route example.com/scim/v2/Users
-
-    GET: Returns pagination response of users
-
-    POST: Add new user to database by creating unique ID
-*/
+/**
+ * URl route example.com/scim/v2/Users
+ */
 
 @Controller
 @RequestMapping("/scim/v2/Users")
@@ -33,17 +28,14 @@ public class UsersController {
       this.db = db;
     }
 
+    /**
+     * Support pagination and filtering by username
+     *
+     * @param params Payload from HTTP request
+     * @return JSON {@link Map} {@link ListResponse}
+     */
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody Map usersGet(@RequestParam Map<String, String> params) {
-        /*
-          Supports pagination and filtering by username
-
-          Params:
-                  JSON dictionary
-          Returns:
-                  JSON Map ListResponse
-        */
-
         Page<User> users;
 
         // If not given count, default to 100
@@ -103,15 +95,16 @@ public class UsersController {
         return returnValue.toScimResource();
     }
 
+    /**
+     * Creates new {@link User} with given attributes
+     *
+     * @param params JSON {@link Map} of {@link User} attributes
+     * @param response HTTP response
+     * @return JSON {@link Map} of {@link User}
+     */
     @RequestMapping(method = RequestMethod.POST)
     public @ResponseBody Map usersPost(@RequestBody Map<String, Object> params, HttpServletResponse response){
-        /*
-            Params: JSON dictionary - params
-                    HttpServletResponse - response
-            Returns: JSON Map
 
-            Updates server response to 201 upon new user creation
-        */
         User newUser = new User(params);
         newUser.id = UUID.randomUUID().toString();
         db.save(newUser);

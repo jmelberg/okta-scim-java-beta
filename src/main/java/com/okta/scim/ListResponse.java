@@ -7,14 +7,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
+/**
+ * Returns an array of SCIM resources into a Query Resource
+ */
 public class ListResponse {
     private List<User> list;
     private int startIndex;
     private int count;
     private int totalResults;
 
-    // Init
     ListResponse(){
         this.list = new ArrayList<>();
         this.startIndex = 1;
@@ -31,12 +32,10 @@ public class ListResponse {
         this.totalResults = totalResults.orElse(0);
     }
 
-
+    /**
+     * @return JSON {@link Map} of {@link ListResponse} object
+     */
     Map<String, Object> toScimResource(){
-        /*
-            Returns JSON map of ListResponse
-        */
-
         Map<String, Object> returnValue = new HashMap<>();
 
         List<String> schemas = new ArrayList<>();
